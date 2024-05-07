@@ -1,8 +1,9 @@
 package edu.sharif.nimbus.config;
 
 import edu.sharif.nimbus.repository.CountryRepository;
-import edu.sharif.nimbus.repository.WeatherRepository;
+import edu.sharif.nimbus.repository.UserRepository;
 import edu.sharif.nimbus.service.CountryService;
+import edu.sharif.nimbus.service.UserService;
 import edu.sharif.nimbus.service.WeatherService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,12 +28,18 @@ public class NimbusConfig {
     }
 
     @Bean
-    WeatherRepository weatherRepository(RestTemplate restTemplate) {
-        return new WeatherRepository(restTemplate);
+    WeatherService weatherService(CountryRepository countryRepository) {
+        return new WeatherService(countryRepository);
     }
 
     @Bean
-    WeatherService weatherService(WeatherRepository weatherRepository) {
-        return new WeatherService(weatherRepository);
+    UserService userService(UserRepository userRepository) {
+        return new UserService(userRepository);
     }
+
+    @Bean
+    UserRepository userRepository() {
+        return new UserRepository();
+    }
+
 }

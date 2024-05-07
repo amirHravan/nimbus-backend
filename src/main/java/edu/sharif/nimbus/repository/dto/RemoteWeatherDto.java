@@ -15,10 +15,10 @@ public class RemoteWeatherDto {
     @JsonProperty("humidity")
     private int humidity;
 
-    public Weather toWeather(String countryName) {
+    public Weather toWeather(String countryName, String capitalName) {
         return new Weather(
                 countryName,
-                null,
+                capitalName,
                 this.windSpeed,
                 this.windDegrees,
                 this.temperature,

@@ -1,7 +1,7 @@
 package edu.sharif.nimbus.repository.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.sharif.nimbus.model.dto.CountryName;
+import edu.sharif.nimbus.model.dto.country.CountryName;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

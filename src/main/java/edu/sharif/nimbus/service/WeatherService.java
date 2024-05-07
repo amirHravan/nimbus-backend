@@ -1,7 +1,7 @@
 package edu.sharif.nimbus.service;
 
 import edu.sharif.nimbus.model.Weather;
-import edu.sharif.nimbus.repository.WeatherRepository;
+import edu.sharif.nimbus.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WeatherService {
 
-    private final WeatherRepository weatherRepository;
+    private final CountryRepository weatherRepository;
 
     public Weather getCountryWeatherByName(String name) {
-        return weatherRepository.getCountryWeatherByName(name);
+        return weatherRepository.getCountryCapitalWeatherByCountryName(name);
     }
 }

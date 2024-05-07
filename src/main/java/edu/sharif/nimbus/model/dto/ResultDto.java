@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class CountryNameDto {
-    final String name;
+public class ResultDto {
+    private final boolean isSuccessful;
+    private final String message;
 }

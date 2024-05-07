@@ -1,7 +1,7 @@
 package edu.sharif.nimbus.service;
 
 import edu.sharif.nimbus.model.Country;
-import edu.sharif.nimbus.model.dto.CountryName;
+import edu.sharif.nimbus.model.dto.country.CountryName;
 import edu.sharif.nimbus.repository.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,8 @@ public class CountryService {
         this.countryRepository = countryRepository;
     }
 
-    public CountryName[] getAllCountryNames() {
-        return countryRepository.getAllCountryNames().toArray(CountryName[]::new);
+    public CountryName[] getAllCountriesNames() {
+        return countryRepository.getAllCountriesNames().toArray(CountryName[]::new);
     }
 
     public Country getCountryByName(String name) {
