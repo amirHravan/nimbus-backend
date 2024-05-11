@@ -21,10 +21,9 @@ public class CountryRepository {
     private final RestTemplate restTemplate;
     private final HttpHeaders headers = new HttpHeaders();
 
-
-    public CountryRepository(RestTemplate restTemplate) {
+    public CountryRepository(RestTemplate restTemplate, String ninjaApiToken) {
         this.restTemplate = restTemplate;
-        headers.set("x-api-key", "YFYFLq8w2VWqtV7+cEuR1w==rCQK6tb69C2huMdm");
+        headers.set("x-api-key", ninjaApiToken);
     }
 
     public ArrayList<CountryName> getAllCountriesNames() {

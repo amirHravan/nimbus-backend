@@ -1,6 +1,9 @@
 package edu.sharif.nimbus.repository;
 
+import edu.sharif.nimbus.exception.UserNameNotAllowedException;
+import edu.sharif.nimbus.exception.UserNotActiveException;
 import edu.sharif.nimbus.exception.UserNotFoundException;
+import edu.sharif.nimbus.exception.UserUnAuthorizedException;
 import edu.sharif.nimbus.model.User;
 import lombok.Getter;
 
@@ -24,30 +27,34 @@ public class UserRepository {
         return null;
     }
 
-    public boolean registerUser(User user) {
-        if (!isUsernameUnique(user.getUsername())) {
-            return false;
+    public boolean registerUser(String username, String password) {
+        if (!isUsernameUnique(username)) {
+            throw new UserNameNotAllowedException(username);
         }
-        userList.add(user);
+        userList.add(new User(username, password));
         return true;
     }
 
-    public boolean loginUser(User user) {
-        if (isUsernameUnique(user.getUsername())) {
-            throw new UserNotFoundException(user.getUsername());
+    public User loginUser(String username, String password) {
+        User user = getUserByUserName(username);
+        if (user == null) {
+            throw new UserNotFoundException(username);
         }
-
-        return true;
+        if (!user.isActive()) {
+            throw new UserNotActiveException(username + " is not active!");
+        }
+        if (!user.getPassword().equals(password)) {
+            throw new UserUnAuthorizedException("username or password is incorrect!");
+        }
+        return user;
     }
 
     public boolean changeUserActivation(String username, boolean setActive) {
-        if (isUsernameUnique(username)) {
+        User user = getUserByUserName(username);
+        if (user == null) {
             throw new UserNotFoundException(username);
         }
-
-        User user = getUserByUserName(username);
-        assert user != null;
-        user.setActive(setActive);
+        user.changeActivation(setActive);
         return true;
 
     }

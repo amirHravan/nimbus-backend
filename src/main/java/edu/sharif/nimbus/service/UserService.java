@@ -1,9 +1,10 @@
 package edu.sharif.nimbus.service;
 
+import edu.sharif.nimbus.exception.UserNotAllowedException;
+import edu.sharif.nimbus.model.Token;
 import edu.sharif.nimbus.model.User;
 import edu.sharif.nimbus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 
@@ -12,24 +13,30 @@ import java.util.ArrayList;
 public class UserService {
 
     private final UserRepository userRepository;
-
-    @Value("admin.password.key")
-    private String adminApiKey;
+    private final String adminApiKey;
 
     public ArrayList<User> getAllUsers(String authorization) {
+        authorizeAdmin(authorization);
         return UserRepository.getUserList();
     }
 
-    public boolean registerUser(User user) {
-        return userRepository.registerUser(user);
+    public boolean registerUser(String username, String password) {
+        return userRepository.registerUser(username, password);
     }
 
-    public boolean changeUserActivation(String username, boolean activation) {
+    public boolean changeUserActivation(String authorization, String username, boolean activation) {
+        authorizeAdmin(authorization);
         return userRepository.changeUserActivation(username, activation);
     }
 
-    public boolean loginUser(User user) {
-        return userRepository.loginUser(user);
+    public Token loginUser(String username, String password) {
+        return userRepository.loginUser(username, password).getMainToken();
+    }
+
+    private void authorizeAdmin(String authorization) throws UserNotAllowedException {
+        if (!authorization.equals(this.adminApiKey)) {
+            throw new UserNotAllowedException("Not Allowed!");
+        }
     }
 
 }
