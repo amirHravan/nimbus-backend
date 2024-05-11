@@ -1,4 +1,4 @@
-package edu.sharif.nimbus.model.dto;
+package edu.sharif.nimbus.model.dto.token;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.sharif.nimbus.model.Token;

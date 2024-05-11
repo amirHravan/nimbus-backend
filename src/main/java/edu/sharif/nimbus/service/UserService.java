@@ -7,6 +7,7 @@ import edu.sharif.nimbus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -37,6 +38,18 @@ public class UserService {
         if (!authorization.equals(this.adminApiKey)) {
             throw new UserNotAllowedException("Not Allowed!");
         }
+    }
+
+    public Token addToken(String authorization, String name, String expirationDate) {
+        return userRepository.addToken(authorization, name, expirationDate);
+    }
+
+    public void deleteToken(String authorization) {
+        userRepository.deleteToken(authorization);
+    }
+
+    public List<Token> getTokens(String authorization) {
+        return userRepository.getTokens(authorization);
     }
 
 }

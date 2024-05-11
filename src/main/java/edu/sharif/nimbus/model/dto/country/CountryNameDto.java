@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class CountryNameDto {
-    final String name;
+    private final String name;
 }
