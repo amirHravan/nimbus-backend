@@ -20,7 +20,7 @@ public class TokenDto {
 
     public TokenDto(Token token) {
         this.name = token.getName();
-        this.expireDateText = token.getExpirationDate() == null ? "inf" : new Date(token.getExpirationDate()).toString();
+        this.expireDateText = token.getExpirationDate() == null ? "inf" : token.getExpirationDate().toString();
         this.token = token.getValue();
     }
 }

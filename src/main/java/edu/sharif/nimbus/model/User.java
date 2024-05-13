@@ -5,6 +5,7 @@ import edu.sharif.nimbus.util.TokenGenerator;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Data
@@ -34,8 +35,8 @@ public class User {
         this.mainToken = null;
     }
 
-    public Token addToken(String name, Long expirationDate) {
-        Token newToken = new Token(name, TokenGenerator.generateApiToken(), expirationDate);
+    public Token addToken(String name, String expirationDate) {
+        Token newToken = new Token(name, TokenGenerator.generateApiToken(), LocalDateTime.parse(expirationDate));
         this.tokens.add(newToken);
         return newToken;
     }

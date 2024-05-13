@@ -9,8 +9,8 @@ import edu.sharif.nimbus.model.Token;
 import edu.sharif.nimbus.model.User;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class UserRepository {
@@ -44,9 +44,8 @@ public class UserRepository {
         if (user.getMainToken().getValue().equals(authorization)) {
             return false;
         }
-        Date expireDate = new Date(user.getTokens().stream().filter(token -> token.getValue().equals(authorization)).toList().get(0).getExpirationDate());
-        Date now = new Date();
-        return expireDate.before(now);
+        LocalDateTime expireDate = user.getTokens().stream().filter(token -> token.getValue().equals(authorization)).toList().get(0).getExpirationDate();
+        return expireDate.isBefore(LocalDateTime.now());
     }
 
     public boolean registerUser(String username, String password) {
@@ -94,7 +93,7 @@ public class UserRepository {
 
     public Token addToken(String authorization, String name, String expirationDate) {
         User user = authorizeUser(authorization);
-        return user.addToken(name, Long.valueOf(expirationDate));
+        return user.addToken(name, expirationDate);
     }
 
     public void deleteToken(String authorization) {
