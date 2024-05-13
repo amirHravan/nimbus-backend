@@ -6,7 +6,6 @@ import edu.sharif.nimbus.model.User;
 import edu.sharif.nimbus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,7 +15,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final String adminApiKey;
 
-    public ArrayList<User> getAllUsers(String authorization) {
+    public List<User> getAllUsers(String authorization) {
         authorizeAdmin(authorization);
         return UserRepository.getUserList();
     }

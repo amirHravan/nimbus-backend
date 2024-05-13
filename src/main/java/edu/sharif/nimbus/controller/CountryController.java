@@ -4,7 +4,6 @@ import edu.sharif.nimbus.model.dto.country.CountryDto;
 import edu.sharif.nimbus.model.dto.country.CountryNameListDto;
 import edu.sharif.nimbus.model.dto.country.WeatherDto;
 import edu.sharif.nimbus.service.CountryService;
-import edu.sharif.nimbus.service.UserService;
 import edu.sharif.nimbus.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
