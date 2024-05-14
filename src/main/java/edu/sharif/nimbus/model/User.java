@@ -5,6 +5,7 @@ import edu.sharif.nimbus.util.TokenGenerator;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Data
@@ -16,12 +17,12 @@ public class User {
     private Token mainToken = null;
     private boolean isActive = false;
 
-    public void changeActivation(Boolean setActive) {
-        if (setActive) ActivateUser();
-        else DeactivateUser();
+    public void changeActivation(boolean setActive) {
+        if (setActive) activateUser();
+        else deactivateUser();
     }
 
-    private void ActivateUser() {
+    private void activateUser() {
         this.isActive = true;
         this.mainToken = new Token(
                 "main_token",
@@ -29,9 +30,19 @@ public class User {
                 null);
     }
 
-    private void DeactivateUser() {
+    private void deactivateUser() {
         this.isActive = false;
         this.mainToken = null;
+    }
+
+    public Token addToken(String name, String expirationDate) {
+        Token newToken = new Token(name, TokenGenerator.generateApiToken(), LocalDateTime.parse(expirationDate));
+        this.tokens.add(newToken);
+        return newToken;
+    }
+
+    public void deleteToken(String authorization) {
+        this.tokens.removeIf(token -> token.getValue().equals(authorization));
     }
 
 

@@ -10,9 +10,9 @@ import java.util.Arrays;
 @Data
 public class CountryNameListDto {
     @JsonProperty("countries")
-    public final CountryNameDto[] countries;
+    private final CountryNameDto[] countries;
     @JsonProperty("count")
-    public final int count;
+    private final int count;
 
     public CountryNameListDto(CountryName[] countryNames) {
         this.countries = Arrays.stream(countryNames).map(countryName -> new CountryNameDto(countryName.getName())).toArray(CountryNameDto[]::new);

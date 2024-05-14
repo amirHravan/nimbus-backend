@@ -24,13 +24,13 @@ public class NimbusConfig {
     }
 
     @Bean
-    CountryService countryService(CountryRepository countryRepository) {
-        return new CountryService(countryRepository);
+    CountryService countryService(CountryRepository countryRepository, UserRepository userRepository) {
+        return new CountryService(countryRepository, userRepository);
     }
 
     @Bean
-    WeatherService weatherService(CountryRepository countryRepository) {
-        return new WeatherService(countryRepository);
+    WeatherService weatherService(CountryRepository countryRepository, UserRepository userRepository) {
+        return new WeatherService(countryRepository, userRepository);
     }
 
     @Bean

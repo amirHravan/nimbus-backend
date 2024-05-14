@@ -1,11 +1,15 @@
 package edu.sharif.nimbus.controller;
 
 import edu.sharif.nimbus.model.dto.ListDto;
-import edu.sharif.nimbus.model.dto.TokenDto;
+import edu.sharif.nimbus.model.dto.ResultDto;
+import edu.sharif.nimbus.model.dto.token.NameAndExpireDateDto;
+import edu.sharif.nimbus.model.dto.token.TokenDto;
+import edu.sharif.nimbus.model.dto.token.TokenListDto;
 import edu.sharif.nimbus.model.dto.user.UserDto;
 import edu.sharif.nimbus.model.dto.user.UsernamePasswordDto;
 import edu.sharif.nimbus.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,7 +20,7 @@ public class UserController {
 
     @GetMapping("/admin/users")
     public ListDto<UserDto> getAllRegisteredUsers(
-            @RequestHeader("Authorization") String authorization
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization
     ) {
         return new ListDto<>(
                 userService
@@ -31,7 +35,7 @@ public class UserController {
     public boolean activateUser(
             @RequestParam("username") String username,
             @RequestParam("active") boolean active,
-            @RequestHeader("Authorization") String authorization
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization
     ) {
         return userService.changeUserActivation(authorization, username, active);
     }
@@ -49,4 +53,29 @@ public class UserController {
     ) {
         return new TokenDto(userService.loginUser(userInformation.getUsername(), userInformation.getPassword()));
     }
+
+    @PostMapping("/user/api-tokens")
+    public TokenDto addToken(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+            @RequestBody NameAndExpireDateDto tokenInformation
+    ) {
+        return new TokenDto(userService.addToken(authorization, tokenInformation.getName(), tokenInformation.getExpirationDate()));
+    }
+
+    @DeleteMapping("/user/api-tokens")
+    public ResultDto deleteToken(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization
+    ) {
+        userService.deleteToken(authorization);
+        return new ResultDto(true, "deleted");
+    }
+
+    @GetMapping("/user/api-tokens")
+    public TokenListDto getTokenList(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization
+    ) {
+        return new TokenListDto(userService.getTokens(authorization).stream().map(TokenDto::new).toList());
+    }
+
+
 }

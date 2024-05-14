@@ -1,4 +1,4 @@
-package edu.sharif.nimbus.model.dto;
+package edu.sharif.nimbus.model.dto.token;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.sharif.nimbus.model.Token;
@@ -20,7 +20,7 @@ public class TokenDto {
 
     public TokenDto(Token token) {
         this.name = token.getName();
-        this.expireDateText = token.getExpirationDate() == null ? "inf" : new Date(token.getExpirationDate()).toString();
+        this.expireDateText = token.getExpirationDate() == null ? "inf" : token.getExpirationDate().toString();
         this.token = token.getValue();
     }
 }

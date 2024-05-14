@@ -15,8 +15,4 @@ public class ListDto<T> {
         this.count = this.list.size();
     }
 
-    public ListDto(ArrayList<T> arrayList) {
-        this.list = arrayList;
-        this.count = this.list.size();
-    }
 }

@@ -1,17 +1,16 @@
 package edu.sharif.nimbus.model.dto.user;
 
 
-import edu.sharif.nimbus.model.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
 public class UsernamePasswordDto {
+    @JsonProperty("username")
     private final String username;
+    @JsonProperty("password")
     private final String password;
 
-    public User toUser() {
-        return new User(username, password);
-    }
 }
