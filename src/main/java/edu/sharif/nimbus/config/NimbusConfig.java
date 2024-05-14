@@ -24,23 +24,18 @@ public class NimbusConfig {
     }
 
     @Bean
-    CountryService countryService(CountryRepository countryRepository, UserRepository userRepository) {
-        return new CountryService(countryRepository, userRepository);
+    CountryService countryService(CountryRepository countryRepository, UserService userService) {
+        return new CountryService(countryRepository, userService);
     }
 
     @Bean
-    WeatherService weatherService(CountryRepository countryRepository, UserRepository userRepository) {
-        return new WeatherService(countryRepository, userRepository);
+    WeatherService weatherService(CountryRepository countryRepository, UserService userService) {
+        return new WeatherService(countryRepository, userService);
     }
 
     @Bean
     UserService userService(UserRepository userRepository, @Value("${admin.password.key}") String adminApiKey) {
         return new UserService(userRepository, adminApiKey);
-    }
-
-    @Bean
-    UserRepository userRepository() {
-        return new UserRepository();
     }
 
 }

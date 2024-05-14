@@ -2,18 +2,30 @@ package edu.sharif.nimbus.model;
 
 
 import edu.sharif.nimbus.util.TokenGenerator;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 @Data
 @RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 public class User {
+    @Id
     private final String username;
     private final String password;
-    private final ArrayList<Token> tokens = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private final List<Token> tokens = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL)
     private Token mainToken = null;
     private boolean isActive = false;
 
@@ -27,7 +39,7 @@ public class User {
         this.mainToken = new Token(
                 "main_token",
                 TokenGenerator.generateApiToken(),
-                null);
+                LocalDateTime.MAX);
     }
 
     private void deactivateUser() {
