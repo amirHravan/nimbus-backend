@@ -1,30 +1,56 @@
 package edu.sharif.nimbus.service;
 
 import edu.sharif.nimbus.model.Country;
+import edu.sharif.nimbus.model.Weather;
 import edu.sharif.nimbus.model.dto.country.CountryName;
-import edu.sharif.nimbus.repository.CountryRepository;
-import edu.sharif.nimbus.repository.UserRepository;
+import edu.sharif.nimbus.repository.dto.RemoteCountryDto;
+import edu.sharif.nimbus.repository.dto.RemoteCountryNameListDto;
+import edu.sharif.nimbus.repository.dto.RemoteWeatherDto;
+import edu.sharif.nimbus.util.URLs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class CountryService {
-    final CountryRepository countryRepository;
-    final UserRepository userRepository;
+    final UserService userService;
+    private final RestTemplate restTemplate;
+    private final HttpHeaders headers = new HttpHeaders();
 
     @Autowired
-    public CountryService(CountryRepository countryRepository, UserRepository userRepository) {
-        this.countryRepository = countryRepository;
-        this.userRepository = userRepository;
+    public CountryService(UserService userService, RestTemplate restTemplate, String ninjaApiToken) {
+        this.userService = userService;
+        this.restTemplate = restTemplate;
+        headers.set("x-api-key", ninjaApiToken);
     }
 
     public CountryName[] getAllCountriesNames(String authorization) {
-        userRepository.authorizeUser(authorization);
-        return countryRepository.getAllCountriesNames().toArray(CountryName[]::new);
+        userService.authorizeUser(authorization);
+        RemoteCountryNameListDto data = restTemplate.getForObject(URLs.COUNTRIES.url, RemoteCountryNameListDto.class);
+        assert data != null;
+        return data.getCountryNames().toArray(CountryName[]::new);
     }
 
     public Country getCountryByName(String name, String authorization) {
-        userRepository.authorizeUser(authorization);
-        return countryRepository.getCountryByName(name);
+        userService.authorizeUser(authorization);
+        HttpEntity<RemoteCountryDto> requestEntity = new HttpEntity<>(headers);
+        RemoteCountryDto[] data = restTemplate.exchange(URLs.COUNTRY.url + name, HttpMethod.GET, requestEntity, RemoteCountryDto[].class).getBody();
+        assert data != null;
+        return data[0].toCountry(name);
+    }
+
+    public Weather getCountryCapitalWeatherByCountryName(String countryName, String authorization) {
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        Country country = getCountryByName(countryName, authorization);
+        RemoteWeatherDto data = restTemplate.exchange(URLs.WEATHER.url + country.getCapital(),
+                HttpMethod.GET,
+                requestEntity,
+                RemoteWeatherDto.class
+        ).getBody();
+        assert data != null;
+        return data.toWeather(countryName, country.getCapital());
     }
 }

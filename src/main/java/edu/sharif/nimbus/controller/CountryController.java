@@ -4,7 +4,6 @@ import edu.sharif.nimbus.model.dto.country.CountryDto;
 import edu.sharif.nimbus.model.dto.country.CountryNameListDto;
 import edu.sharif.nimbus.model.dto.country.WeatherDto;
 import edu.sharif.nimbus.service.CountryService;
-import edu.sharif.nimbus.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CountryController {
 
     private final CountryService countryService;
-    private final WeatherService weatherService;
 
     @GetMapping("")
     public CountryNameListDto getCountryList(
@@ -41,7 +39,7 @@ public class CountryController {
             @PathVariable String name,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization
     ) {
-        return new WeatherDto(weatherService.getCountryWeatherByName(name, authorization));
+        return new WeatherDto(countryService.getCountryCapitalWeatherByCountryName(name, authorization));
     }
 
 }
