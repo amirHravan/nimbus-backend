@@ -2,11 +2,13 @@ package edu.sharif.nimbus.repository.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.sharif.nimbus.model.Country;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class RemoteCountryDto {
     @JsonProperty("capital")
     private String capital;

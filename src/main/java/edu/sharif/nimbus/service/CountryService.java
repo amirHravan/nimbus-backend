@@ -31,11 +31,11 @@ public class CountryService {
     }
 
     @Cacheable("countries")
-    public CountryName[] getAllCountriesNames(String authorization) {
+    public CountryName[] getAllCountriesNames(String authorization, int page, int limit) {
         userService.authorizeUser(authorization);
         RemoteCountryNameListDto data = restTemplate.getForObject(URLs.COUNTRIES.url, RemoteCountryNameListDto.class);
         assert data != null;
-        return data.getCountryNames().toArray(CountryName[]::new);
+        return data.getCountryNames(page, limit).toArray(CountryName[]::new);
     }
 
     @Cacheable("country")

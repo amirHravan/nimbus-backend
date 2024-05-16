@@ -6,11 +6,7 @@ import edu.sharif.nimbus.model.dto.country.WeatherDto;
 import edu.sharif.nimbus.service.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/countries")
@@ -21,9 +17,11 @@ public class CountryController {
 
     @GetMapping("")
     public CountryNameListDto getCountryList(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+            @RequestParam(name = "page",defaultValue =  "0") int page,
+            @RequestParam(name = "limit", defaultValue =  "10") int limit
     ) {
-        return new CountryNameListDto(countryService.getAllCountriesNames(authorization));
+        return new CountryNameListDto(countryService.getAllCountriesNames(authorization, page, limit));
     }
 
     @GetMapping("/{name}")
