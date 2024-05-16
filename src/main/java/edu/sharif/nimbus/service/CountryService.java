@@ -8,6 +8,7 @@ import edu.sharif.nimbus.repository.dto.RemoteCountryNameListDto;
 import edu.sharif.nimbus.repository.dto.RemoteWeatherDto;
 import edu.sharif.nimbus.util.URLs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,11 +28,11 @@ public class CountryService {
         headers.set("x-api-key", ninjaApiToken);
     }
 
-    public CountryName[] getAllCountriesNames(String authorization) {
+    public CountryName[] getAllCountriesNames(String authorization, int page, int limit) {
         userService.authorizeUser(authorization);
         RemoteCountryNameListDto data = restTemplate.getForObject(URLs.COUNTRIES.url, RemoteCountryNameListDto.class);
         assert data != null;
-        return data.getCountryNames().toArray(CountryName[]::new);
+        return data.getCountryNames(page, limit).toArray(CountryName[]::new);
     }
 
     public Country getCountryByName(String name, String authorization) {

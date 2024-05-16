@@ -98,4 +98,24 @@ public class CountryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Iran")));
     }
+
+    @Test
+    void getCountryWeatherTest() throws Exception {
+        mockRequiredMethods();
+
+        mockServer.expect(requestTo(URLs.COUNTRY.url + "Iran"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess("[{\"gdp\": 473091.0, \"sex_ratio\": 102.0, \"surface_area\": 1628750.0, \"life_expectancy_male\": 75.3, \"unemployment\": 11.2, \"imports\": 20502.0, \"homicide_rate\": 2.5, \"currency\": {\"code\": \"IRR\", \"name\": \"Iranian Rial\"}, \"iso2\": \"IR\", \"employment_services\": 51.9, \"employment_industry\": 30.3, \"urban_population_growth\": 2.0, \"secondary_school_enrollment_female\": 84.7, \"employment_agriculture\": 17.8, \"capital\": \"Tehran\", \"co2_emissions\": 567.1, \"forested_area\": 6.6, \"tourists\": 7295.0, \"exports\": 17394.0, \"life_expectancy_female\": 77.6, \"post_secondary_enrollment_female\": 62.9, \"post_secondary_enrollment_male\": 73.3, \"primary_school_enrollment_female\": 113.9, \"infant_mortality\": 12.8, \"gdp_growth\": -4.8, \"threatened_species\": 161.0, \"population\": 83993.0, \"urban_population\": 75.4, \"secondary_school_enrollment_male\": 87.9, \"name\": \"Iran, Islamic Republic Of\", \"pop_growth\": 1.4, \"region\": \"Southern Asia\", \"pop_density\": 51.6, \"internet_users\": 70.0, \"gdp_per_capita\": 5783.5, \"fertility\": 2.2, \"refugees\": 979.5, \"primary_school_enrollment_male\": 107.7}]", MediaType.APPLICATION_JSON));
+        mockServer.expect(requestTo(URLs.WEATHER.url + "Tehran"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess("{\"wind_degrees\": 25.0, \"humidity\": 50.0, \"wind_speed\": 10.0, \"temp\": \"25\"}}", MediaType.APPLICATION_JSON));
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "test");
+        this.mockMvc.perform(get("/countries/Iran/weather").headers(headers))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Iran")));
+    }
 }
