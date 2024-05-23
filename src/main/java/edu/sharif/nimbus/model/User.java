@@ -45,6 +45,7 @@ public class User {
     private void deactivateUser() {
         this.isActive = false;
         this.mainToken = null;
+        this.tokens.clear();
     }
 
     public Token addToken(String name, String expirationDate) {
@@ -56,6 +57,5 @@ public class User {
     public void deleteToken(String authorization) {
         this.tokens.removeIf(token -> token.getValue().equals(authorization));
     }
-
 
 }

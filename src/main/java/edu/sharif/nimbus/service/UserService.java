@@ -1,16 +1,10 @@
 package edu.sharif.nimbus.service;
 
-import edu.sharif.nimbus.exception.UserNameNotAllowedException;
-import edu.sharif.nimbus.exception.UserNotActiveException;
-import edu.sharif.nimbus.exception.UserNotAllowedException;
-import edu.sharif.nimbus.exception.UserNotFoundException;
-import edu.sharif.nimbus.exception.UserUnAuthorizedException;
+import edu.sharif.nimbus.exception.*;
 import edu.sharif.nimbus.model.Token;
 import edu.sharif.nimbus.model.User;
 import edu.sharif.nimbus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -112,6 +106,9 @@ public class UserService {
         }
         if (tokenIsExpired(authorization, user.get())) {
             throw new UserUnAuthorizedException("Token is expired!");
+        }
+        if (!user.get().isActive()) {
+            throw new UserNotActiveException("User is not active!");
         }
         return user.get();
     }
