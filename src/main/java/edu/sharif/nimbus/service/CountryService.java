@@ -62,5 +62,6 @@ public class CountryService {
 
     @CacheEvict(cacheNames = {"countries", "country", "weather"}, allEntries = true)
     @Scheduled(fixedRateString = "${spring.cache.time-to-live}")
-    public void cacheEvict() {}
+    public void cacheEvict() {
+    }
 }

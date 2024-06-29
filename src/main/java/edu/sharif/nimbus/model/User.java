@@ -2,11 +2,7 @@ package edu.sharif.nimbus.model;
 
 
 import edu.sharif.nimbus.util.TokenGenerator;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +19,7 @@ public class User {
     @Id
     private final String username;
     private final String password;
+    private final LocalDateTime registrationDate = LocalDateTime.now();
     @OneToMany(cascade = CascadeType.ALL)
     private final List<Token> tokens = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL)

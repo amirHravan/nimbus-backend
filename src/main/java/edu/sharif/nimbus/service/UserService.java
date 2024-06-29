@@ -10,12 +10,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-    private final String adminApiKey;
+    private final User admin;
 
     public List<User> getAllUsers(String authorization) {
         authorizeAdmin(authorization);
@@ -23,7 +22,7 @@ public class UserService {
     }
 
     public boolean registerUser(String username, String password) {
-        if (userRepository.findById(username).isPresent()) {
+        if (userRepository.findById(username).isPresent() || username.equals("admin")) {
             throw new UserNameNotAllowedException(username);
         }
         userRepository.save(new User(username, password));
@@ -42,6 +41,9 @@ public class UserService {
     }
 
     public Token loginUser(String username, String password) {
+        if (this.admin.getUsername().equals(username) && this.admin.getPassword().equals(password)) {
+            return admin.getMainToken();
+        }
         Optional<User> user = userRepository.findById(username);
         if (user.isEmpty()) {
             throw new UserNotFoundException(username);
@@ -56,7 +58,7 @@ public class UserService {
     }
 
     private void authorizeAdmin(String authorization) throws UserNotAllowedException {
-        if (!authorization.equals(this.adminApiKey)) {
+        if (!authorization.equals(this.admin.getMainToken().getValue())) {
             throw new UserNotAllowedException("Not Allowed!");
         }
     }
@@ -84,7 +86,7 @@ public class UserService {
 
     private Optional<User> findUserByToken(String tokenValue) {
         for (User user : userRepository.findAll()) {
-            if (user.getTokens().stream().anyMatch(token -> token.getValue().equals(tokenValue)) || user.getMainToken().getValue().equals(tokenValue)) {
+            if (user.getTokens().stream().anyMatch(token -> token.getValue().equals(tokenValue)) || (user.getMainToken() != null && user.getMainToken().getValue().equals(tokenValue))) {
                 return Optional.of(user);
             }
         }

@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -20,7 +23,9 @@ public class UserController {
 
     @GetMapping("/admin/users")
     public ListDto<UserDto> getAllRegisteredUsers(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "limit", defaultValue = "20") int limit
     ) {
         return new ListDto<>(
                 userService
@@ -28,6 +33,7 @@ public class UserController {
                         .stream()
                         .map(UserDto::new)
                         .toList()
+                , page, limit
         );
     }
 
@@ -72,9 +78,11 @@ public class UserController {
 
     @GetMapping("/user/api-tokens")
     public TokenListDto getTokenList(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "limit", defaultValue = "20") int limit
     ) {
-        return new TokenListDto(userService.getTokens(authorization).stream().map(TokenDto::new).toList());
+        return new TokenListDto(userService.getTokens(authorization).stream().map(TokenDto::new).toList(), page, limit);
     }
 
 

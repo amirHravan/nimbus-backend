@@ -5,8 +5,6 @@ import edu.sharif.nimbus.model.Token;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Date;
-
 
 @Data
 @RequiredArgsConstructor

@@ -18,8 +18,8 @@ public class CountryController {
     @GetMapping("")
     public CountryNameListDto getCountryList(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
-            @RequestParam(name = "page",defaultValue =  "0") int page,
-            @RequestParam(name = "limit", defaultValue =  "10") int limit
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "limit", defaultValue = "10") int limit
     ) {
         return new CountryNameListDto(countryService.getAllCountriesNames(authorization, page, limit));
     }
